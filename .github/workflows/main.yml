@@ -10,14 +10,16 @@ on:
         required: true
         description: LT Username
         default: obiorah.edeh
-      accessKey:
-        description: LT Access Key
-        default: GUkG9pBOoxPGdoWfaDXtdJQkf9sBr05eRssYH1p7Dm94LMkNmK
-        required: true
+#       accessKey:
+#         description: LT Access Key
+#         default: GUkG9pBOoxPGdoWfaDXtdJQkf9sBr05eRssYH1p7Dm94LMkNmK
+#         required: true
       sampleRepoLink:
         description: Link to the HyperExecute sample repo
         default: https://github.com/prateekLambda/cucumber-selenium-hyperexecute-sample.git
         required: true
+# env:
+#   accessKey: ${{ secrets.test }}
     
 jobs:
   check-bats-version:
@@ -49,13 +51,12 @@ jobs:
               cd cucumber-selenium-hyperexecute-sample
               curl https://downloads.lambdatest.com/hyperexecute/windows/hyperexecute.exe -o hyperexecute.exe
               export LT_USERNAME=${{ github.event.inputs.username }}
-              export LT_ACCESS_KEY=${{ github.event.inputs.accessKey }}
               echo $LT_USERNAME
               echo $LT_ACCESS_KEY
               echo "Setting Job label as Jira ticket number"
               export jobLabel="HYP-568"
               echo $jobLabel
-              ./hyperexecute --user $LT_USERNAME --key $LT_ACCESS_KEY --config yaml/win/cucumber_hyperexecute_autosplit_sample.yaml --download-artifacts --force-clean-artifacts --labels $jobLabel
+              ./hyperexecute --user $LT_USERNAME --key ${{ secrets.test }} --config yaml/win/cucumber_hyperexecute_autosplit_sample.yaml --download-artifacts --force-clean-artifacts --labels $jobLabel
               cd .hyperexecute
               jq .summary.job_link result.json>out.tmp
               echo "HyperExecute Job Dashboard Link:"
